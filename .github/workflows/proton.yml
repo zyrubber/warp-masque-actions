@@ -25,8 +25,10 @@ jobs:
           set -euo pipefail
           # 官方库自带 SRP 实现，不用自己写。
           # 它验 Modulus 的 PGP 签名要 gpg，runner 自带。
-          pip install -q "git+https://github.com/ProtonVPN/python-proton-core.git" cryptography
-          gpg --version | head -1
+          python3 -m pip install -q --upgrade \
+            "git+https://github.com/ProtonVPN/python-proton-core.git" \
+            cryptography
+          python3 -m pip show proton-core
 
       - name: 登录并生成凭据
         env:

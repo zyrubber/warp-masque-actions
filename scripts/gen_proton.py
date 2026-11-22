@@ -7,6 +7,7 @@ Worker 不碰 Proton 登录（那会触发风控），只消费这段文本。
 用法: PROTON_USER=x PROTON_PASS=y python3 gen_proton.py <输出目录>
 """
 import asyncio, base64, hashlib, json, os, sys, time
+import platform
 from proton.session import Session
 from cryptography.hazmat.primitives.asymmetric import ed25519
 from cryptography.hazmat.primitives import serialization
@@ -29,8 +30,10 @@ def ed25519_to_wg(raw_sk: bytes) -> str:
 
 async def main():
     outdir = sys.argv[1] if len(sys.argv) > 1 else "dist"
-    s = Session(appversion="linux-vpn@4.8.2",
-                user_agent="ProtonVPN/4.8.2 (Linux; Ubuntu/24.04)")
+    s = Session(
+    appversion=f"linux-vpn-gui@5.8.11+{platform.machine().replace('_', '-')}",
+    user_agent="ProtonVPN/5.8.11 (Linux; ubuntu/26.04)"
+)
 
     if not await s.async_authenticate(os.environ["PROTON_USER"],
                                       os.environ["PROTON_PASS"]):
